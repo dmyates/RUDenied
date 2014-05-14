@@ -1,0 +1,17 @@
+{
+   "name": "RUDenied",
+   "version": "2.3.1",
+   "description": "Monitors Rhodes University Quota.",
+   "icons": { "32": "ru.png",
+           "48": "ru48.png",
+          "128": "ru128.png" },
+   "background": {
+	  "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": "ru.png",
+      "default_popup": "popup.html"
+   },
+   "permissions": [ "http://*.ru.ac.za/", "tabs", "background", "storage" ],
+   "manifest_version": 2
+}

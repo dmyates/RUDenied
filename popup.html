@@ -1,0 +1,169 @@
+<!--
+RUDenied for Google Chrome (Copyright (c) 2010, Joao Lourenco, All rights reserved.)
+This is provided as is and no responsibility is taken for any effects on a user's system.
+
+Some source was derived from the Firefox plugin RUDenied, carrying the following declaration,
+and is therefore applicable to this source as well:
+
+ Copyright (c) 2007-2010, Rhodes University, All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+
+  * Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+  * Neither the name of Rhodes University nor the names of its contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+History:
+
+Version 2.3:
+12/11/2013
+- Properly incorporated icons
+
+Version 2.2:
+12/11/2013
+- Fixed Thruk link
+
+Version 2.1:
+23/10/2013
+- Made compliant with Manifest 2.0 standards
+- Added link to new Thruk monitoring system
+- Fixed spelling mistakes
+
+Version 1.7:
+15/08/2010
+- Added noticeboard
+- Added icons
+- Background page updates browser action icon and icon tooltip
+- Changed website and extension location
+
+Version 1.6:
+18/05/2010
+- Major overhaul - using a browser action now
+- Graphs for the quotas
+- Options page
+- Background page
+To do:
+- Background page will update browser action icon (canvas)
+- Background page will update icon tooltip
+- Unauthenticated requests page will reflect the text on the quota site
+
+Version 1.5:
+13/10/2009
+- Removed some debugging stuff
+
+Version 1.4:
+13/10/2009
+- Added get version number from chrome for statistics gathering
+
+Version 1.3:
+09/10/2009
+- Added statistics gathering
+
+Version 1.2:
+15/09/2009
+- Changed refresh interval from 1 minute to 1 hour
+
+Version 1.1:
+14/09/2009
+- Expands and collapes to show more information
+
+Version 1.0:
+14/09/2009
+- Gets per user and per host quota
+- Student number is stored in extension cookie
+-->
+<html>
+    <head>
+        <title>RUDenied</title>
+		<link rel="stylesheet" type="text/css" href="rusuitestyles.css" />
+        <script type="text/javascript" src="jQuery.js"></script>
+        <script type="text/javascript" src="quota.js"></script>
+        <script type="text/javascript" src="popup.js"></script>
+    </head>
+    <body>
+        <!--Header-->
+        <center>
+            <div>
+                <table width="100%">
+                    <tbody>
+                    	<tr>
+                        <td class="popuplogo" colspan="1" align="center">
+                            RUDenied
+                        </td>
+                        <td class="popuplogobutton" id="popuplogobutton" colspan="8">
+                            <img src="refresh.png" alt="Refresh">
+                        </td>
+                    </tr>
+                	</tbody>
+                </table>
+            </div>
+        </center>
+
+        <br />
+
+        <!--Content-->
+        <div class="popupmenu">
+            <article id="tabControl" class="tabs"> 
+                <section id="PerUser" class="current"> 
+                    <h3 id="userHeading">Per User</h3> 
+                    <div id="userContent"> 
+                        <p>In the last <span id="userNumDays">w</span> days, you (<span id="username" class="info">username</span>) have transferred a total of <span id="userMebibytes" class="info">x</span> mebibytes of <a href="https://www.ru.ac.za/quota/faq?show=billable">billable</a> data at an average of <span id="userMebibytesPerDay" class="info">y</span> mebibytes a day. This puts you into the "<span id="userCategory" class="info">category</span>" quota category and corresponds to <span id="userPercentage" class="info">z</span> percent of the current per-user quota.</p> 
+                        <p id="userGraph"></p> 
+                    </div>
+                </section> 
+                <section id="PerHost"> 
+                    <h3 id="hostHeading">Per Host</h3> 
+                    <div id="hostContent">
+                        <p>In the last <span id="hostNumDays">w</span> days, this computer (<span id="hostname" class="info">hostname</span>) has transferred a total of <span id="hostMebibytes" class="info">x</span> mebibytes of <a href="https://www.ru.ac.za/quota/faq?show=billable">billable</a> data at an average of <span id="hostMebibytesPerDay" class="info">y</span> mebibytes a day. This puts you into the "<span id="hostCategory" class="info">category</span>" quota category and corresponds to <span id="hostPercentage" class="info">z</span> percent of the current per-host quota.</p>
+                        <p id="hostGraph"></p>
+                    </div>
+                </section>
+                <section id="UnauthenticatedRequests">
+                    <h3 id="unauthHeading">Unauthenticated Requests</h3>
+                    <div id="unauthContent">
+                        <p>In the last <span id="unauthNumHours">a</span> hours, this computer (<span id="unauthname" class="info">hostname</span>) has requested a page without authentication a total of <span id="unauthRequests" class="info">b</span> times, which corresponds to <span id="unauthPercentage" class="info">z</span> percent of the maximum number of allowed unauthenticated requests. If this exceeds <span id="unauthMaxRequests" class="info">c</span> requests a day, your web access will be blocked until you dip below the threshold. You are currently in the "<span id="unauthCategory" class="info">category</span>" category.</p>
+                        <p id="unauthGraph"></p>
+                    </div>
+                </section>
+                <section id="Noticeboard">
+                		<h3 id="noticeboardHeading">Noticeboard</h3>
+                		<div id="noticeboardContent" class="scrollable">
+                				<p>Loading noticeboard...</p>
+                		</div>
+                </section>
+            </article>
+        </div>
+
+        <br />
+
+        <!--Footer-->
+        <center>
+            <div class="popupfoot">
+                © Joao Lourenco, Kieran Hunt & David Yates
+                <br />
+				<a href="https://monitor.ru.ac.za/rhodes/thruk/" target="_blank">Thruk Monitoring System</a> |
+                <a href="options.html" target="_blank">Options</a> | 
+                <a href="#closewindow">Close Window</a>
+            </div>
+        </center>
+    </body>
+</html>
